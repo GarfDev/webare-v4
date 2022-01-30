@@ -17,10 +17,12 @@
         "access": "public"
     },
     "scripts": {
-        "dev": "ts-node ./src/matcher.ts"
+        "dev": "ts-node -r tsconfig-paths/register ./src"
     },
     "dependencies": {
-        "amqplib": "^0.8.0"
+        "@webare/common": "^1.0.0",
+        "amqplib": "^0.8.0",
+        "dotenv": "^14.3.2"
     },
     "devDependencies": {
         "@types/amqplib": "^0.8.2"
