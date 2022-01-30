@@ -100,5 +100,7 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
-  }
+  },
+  "exclude": ["node_modules", "**/__tests__/*", "**/__e2e__/*"],
+  "references": [{ "@webare/common": "../../libs/common" }]
 }
