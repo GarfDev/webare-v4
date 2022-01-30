@@ -1,7 +1,3 @@
-'use strict';
-
-module.exports = matcher;
-
-function matcher() {
-    // TODO
+export default function matcher() {
+    console.log("Hello from matcher");
 }
