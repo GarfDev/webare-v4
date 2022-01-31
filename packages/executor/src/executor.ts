@@ -1,7 +1,3 @@
-'use strict';
-
-module.exports = executor;
-
-function executor() {
-    // TODO
+export default function executor() {
+  console.log("Hello from executor")
 }

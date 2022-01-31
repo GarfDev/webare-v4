@@ -1,7 +1,9 @@
 import * as amqblib from "amqplib"
 import { CHANNEL } from "@webare/common"
-import { verifyMessage } from "utils"
+import { safeParse, verifyMessage } from "utils"
 import Config from "config"
+import { pipe } from "@webare/utils"
+import { MatcherMessage } from "./types"
 
 export default async function matcher() {
   const connection = await amqblib.connect(Config.AMQB_URL)
@@ -10,11 +12,14 @@ export default async function matcher() {
   channel.consume(CHANNEL.MATCHER, async (msg) => {
     if (!msg) return
     try {
-      console.log(msg.content.toString())
-      const content = verifyMessage(JSON.parse(msg.content.toString()))
+      const content: MatcherMessage | undefined = pipe(
+        safeParse,
+        verifyMessage
+      )(msg.content.toString())
+      if (!content) return channel.nack(msg, false, false)
       channel.ack(msg)
     } catch (e) {
-      channel.nack(msg, false, false)
+      channel.nack(msg, false, true)
     }
   })
 }

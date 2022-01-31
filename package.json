@@ -5,7 +5,8 @@
     "bootstrap": "lerna bootstrap",
     "returner": "yarn workspace @webare/returner",
     "matcher": "yarn workspace @webare/matcher",
-    "common": "yarn workspace @webare/common"
+    "common": "yarn workspace @webare/common",
+    "utils": "yarn workspace @webare/utils"
   },
   "workspaces": [
     "packages/*",

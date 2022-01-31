@@ -1,4 +1,5 @@
 import * as yup from "yup"
+import { compose } from "@webare/utils"
 import { MatcherMessage } from "types"
 
 const schema = yup.object({
@@ -6,8 +7,10 @@ const schema = yup.object({
   payload: yup.object(),
 })
 
-export const verifyMessage = (message: any): MatcherMessage | undefined => {
-  const isValid = schema.validateSync(message)
+export const verifyMessage = async (
+  message: any
+): Promise<MatcherMessage | undefined> => {
+  const isValid = await schema.validate(message)
   if (isValid) return message
   return undefined
 }
