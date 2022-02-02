@@ -1,3 +1,4 @@
+import Redis from "ioredis"
 import * as amqblib from "amqplib"
 import { CHANNEL } from "@webare/common"
 import { safeParse, verifyMessage } from "utils"
@@ -5,6 +6,12 @@ import Config from "config"
 import { pipe } from "@webare/utils"
 import { MatcherMessage } from "./types"
 import { QueueManager, TunnelManage } from "managers"
+
+export const redis = new Redis({
+  port: 6379, // Redis port
+  host: "127.0.0.1", // Redis host
+  family: 4, // 4 (IPv4) or 6 (IPv6)
+})
 
 export default async function matcher() {
   const connection = await amqblib.connect(Config.AMQB_URL)
@@ -25,7 +32,7 @@ export default async function matcher() {
 
       switch (content.type) {
         case "add":
-          const result = queueManager.add(
+          const result = await queueManager.add(
             content.payload.queue!,
             content.payload.uuid!
           )
@@ -34,7 +41,7 @@ export default async function matcher() {
           }
           break
         case "message":
-          const tunnel = tunnelManager.get(content.payload.uuid!)
+          const tunnel = await tunnelManager.get(content.payload.uuid!)
           if (!tunnel) return "TODO: Send error back to author here"
           return "TODO: Send message content to receiver here"
         case "remove":

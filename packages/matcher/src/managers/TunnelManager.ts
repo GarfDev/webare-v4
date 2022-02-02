@@ -1,25 +1,24 @@
+import { redis } from "matcher"
+
+const TUNNEL_NAME = "TUNNEL"
+
 export class TunnelManage {
-  tunnels: TunnelMap
-
-  constructor() {
-    this.tunnels = {}
+  public async get(author: string) {
+    const result = await redis.hget(TUNNEL_NAME, author)
+    return result
   }
 
-  public get(author: string) {
-    return this.tunnels[author]
+  public async add(author: string, receiver: string) {
+    await redis.hset(TUNNEL_NAME, author, receiver)
+    await redis.hset(TUNNEL_NAME, receiver, author)
+    return true
   }
 
-  public add(author: string, receiver: string) {
-    delete this.tunnels[author]
-    delete this.tunnels[receiver]
-    this.tunnels[author] = receiver
-    this.tunnels[receiver] = author
-  }
-
-  public remove(author: string) {
-    const receiver = this.tunnels[author]
-    delete this.tunnels[author]
-    delete this.tunnels[receiver]
+  public async remove(author: string) {
+    const receiver = await redis.hget(TUNNEL_NAME, author)
+    if (!receiver) return false
+    await redis.hdel(TUNNEL_NAME, receiver)
+    await redis.hdel(TUNNEL_NAME, author)
   }
 }
 

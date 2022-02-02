@@ -1,18 +1,17 @@
+import { redis } from "matcher"
+
 export class QueueManager {
-  queues: QueueMap
-
-  constructor() {
-    this.queues = {}
+  public async add(queue: string, uuid: string) {
+    const result = await redis.hset(queue, uuid)
+    return !!result
   }
-
-  public add(queue: string, uuid: string) {
-    if (!this.queues[queue]) return false
-    this.queues[queue][uuid] = uuid
-    return true
-  }
-  public remove(queue: string, uuid: string) {
-    delete this.queues[queue][uuid]
-    return true
+  public async remove(queue: string, uuid: string) {
+    try {
+      const result = await redis.hdel(queue, uuid)
+      return !!result
+    } catch {
+      return false
+    }
   }
 }
 

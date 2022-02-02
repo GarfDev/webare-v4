@@ -1,8 +1,14 @@
 version: '3.8'
 
 services:
-    rabbitmq:
-        image: rabbitmq:3-management-alpine
-        ports:
-            - 5672:5672
-            - 15672:15672
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+  redis:
+    image: redis
+    environment:
+      - REDIS_PASSWORD=password
+    ports:
+      - 6379:6379
