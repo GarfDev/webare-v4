@@ -1,24 +1,37 @@
 import Redis from "ioredis"
 import * as amqblib from "amqplib"
 import { CHANNEL } from "@webare/common"
+import { QueueManager, TunnelManager } from "managers"
 import { safeParse, verifyMessage } from "utils"
-import Config from "config"
+import { MatcherMessage } from "types"
 import { pipe } from "@webare/utils"
-import { MatcherMessage } from "./types"
-import { QueueManager, TunnelManage } from "managers"
+import Config from "config"
+import { addToQueue } from "resources"
 
-export const redis = new Redis({
-  port: 6379, // Redis port
-  host: "127.0.0.1", // Redis host
-  family: 4, // 4 (IPv4) or 6 (IPv6)
-})
+export let redis: Redis.Redis
+export let connection: amqblib.Connection
+export let channel: amqblib.Channel
+
+// Managers
+export let queueManager: QueueManager
+export let tunnelManager: TunnelManager
+
+const initilaize = async () => {
+  // Initializer Services
+  redis = new Redis({
+    port: 6379, // Redis port
+    host: "127.0.0.1", // Redis host
+    family: 4, // 4 (IPv4) or 6 (IPv6)
+  })
+  connection = await amqblib.connect(Config.AMQB_URL)
+  channel = await connection.createChannel()
+  // Initialize Managers
+  queueManager = new QueueManager()
+  tunnelManager = new TunnelManager()
+}
 
 export default async function matcher() {
-  const connection = await amqblib.connect(Config.AMQB_URL)
-  const channel = await connection.createChannel()
-
-  const queueManager = new QueueManager()
-  const tunnelManager = new TunnelManage()
+  await initilaize()
 
   channel.consume(CHANNEL.MATCHER, async (msg) => {
     // Pre-process messages
@@ -32,13 +45,8 @@ export default async function matcher() {
 
       switch (content.type) {
         case "add":
-          const result = await queueManager.add(
-            content.payload.queue!,
-            content.payload.uuid!
-          )
-          if (!result) {
-            return channel.nack(msg, false, false)
-          }
+          const result = await addToQueue(content.payload)
+          if (!result) return channel.nack(msg, false, false)
           break
         case "message":
           const tunnel = await tunnelManager.get(content.payload.uuid!)

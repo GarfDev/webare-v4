@@ -23,6 +23,7 @@
         "@webare/common": "^1.0.0",
         "@webare/utils": "^1.0.0",
         "amqplib": "^0.8.0",
+        "bullmq": "^1.68.2",
         "dotenv": "^14.3.2",
         "ioredis": "^4.28.4"
     },

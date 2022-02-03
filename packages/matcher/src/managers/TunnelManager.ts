@@ -2,7 +2,7 @@ import { redis } from "matcher"
 
 const TUNNEL_NAME = "TUNNEL"
 
-export class TunnelManage {
+export class TunnelManager {
   public async get(author: string) {
     const result = await redis.hget(TUNNEL_NAME, author)
     return result
