@@ -6,7 +6,7 @@ import { safeParse, verifyMessage } from "utils"
 import { MatcherMessage } from "types"
 import { pipe } from "@webare/utils"
 import Config from "config"
-import { addToQueue } from "resources"
+import { addToQueue, removeFromQueue } from "resources"
 
 export let redis: Redis.Redis
 export let connection: amqblib.Connection
@@ -44,15 +44,22 @@ export default async function matcher() {
       if (!content) return channel.nack(msg, false, false)
 
       switch (content.type) {
-        case "add":
+        case "add": {
           const result = await addToQueue(content.payload)
           if (!result) return channel.nack(msg, false, false)
           break
-        case "message":
+        }
+        case "message": {
           const tunnel = await tunnelManager.get(content.payload.uuid!)
           if (!tunnel) return "TODO: Send error back to author here"
           return "TODO: Send message content to receiver here"
-        case "remove":
+        }
+        case "remove:queue": {
+          const result = await removeFromQueue(content.payload)
+          if (!result) return channel.nack(msg, false, false)
+          break
+        }
+        case "remove:tunnel":
           break
       }
 
