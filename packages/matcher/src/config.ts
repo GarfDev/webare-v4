@@ -1,9 +1,10 @@
-import { config } from "dotenv";
+import { config } from "dotenv"
 
-config();
+config()
 
 const Config = {
-    AMQB_URL: process.env.AMQB_URL || "",
-};
+  AMQB_URL: process.env.AMQB_URL || "",
+  REDIS_URL: process.env.REDIS_URL || "",
+}
 
-export default Config;
+export default Config
