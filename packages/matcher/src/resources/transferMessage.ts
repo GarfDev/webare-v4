@@ -1,5 +1,4 @@
-import { CHANNEL } from "@webare/common"
-import { ReturnerMessage } from "@webare/returner"
+import { CHANNEL, GatewayMessage } from "@webare/common"
 import { channel, platformManager, tunnelManager } from "matcher"
 import { MatcherPayload } from "types"
 
@@ -7,7 +6,7 @@ export const transferMessage = async (
   payload: MatcherPayload
 ): Promise<boolean> => {
   try {
-    let message: ReturnerMessage = {
+    let message: GatewayMessage = {
       type: "system",
       payload: {
         ...payload,
@@ -18,7 +17,7 @@ export const transferMessage = async (
     if (!receiver) {
       message.payload.content = "not_matched"
       channel.sendToQueue(
-        CHANNEL.RETURNER,
+        `${message.payload.platform}:${CHANNEL.OUTBOUND}`,
         Buffer.from(JSON.stringify(message))
       )
       return false
@@ -30,7 +29,10 @@ export const transferMessage = async (
     message.payload.platform = rPlatform!
     message.payload.uuid = receiver
 
-    channel.sendToQueue(CHANNEL.RETURNER, Buffer.from(JSON.stringify(message)))
+    channel.sendToQueue(
+      `${message.payload.platform}:${CHANNEL.OUTBOUND}`,
+      Buffer.from(JSON.stringify(message))
+    )
 
     return true
   } catch {

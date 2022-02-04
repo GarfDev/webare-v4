@@ -3,7 +3,6 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "returner": "yarn workspace @webare/returner",
     "matcher": "yarn workspace @webare/matcher",
     "common": "yarn workspace @webare/common",
     "utils": "yarn workspace @webare/utils"

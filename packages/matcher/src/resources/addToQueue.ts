@@ -1,12 +1,11 @@
-import { CHANNEL } from "@webare/common"
-import { ReturnerMessage } from "@webare/returner"
+import { CHANNEL, GatewayMessage } from "@webare/common"
 import { channel, queueManager, tunnelManager } from "matcher"
 import { matcherJobQueue } from "timers/matcher"
 import { MatcherMessage } from "types"
 
 export const addToQueue = async (payload: MatcherMessage["payload"]) => {
   try {
-    let message: ReturnerMessage = {
+    let message: GatewayMessage = {
       type: "system",
       payload: {
         ...payload,
@@ -18,14 +17,17 @@ export const addToQueue = async (payload: MatcherMessage["payload"]) => {
     if (tunnel) {
       message.payload.content = "add_queue.already_matched"
       channel.sendToQueue(
-        CHANNEL.RETURNER,
+        `${message.payload.platform}:${CHANNEL.OUTBOUND}`,
         Buffer.from(JSON.stringify(message))
       )
       return false
     }
     await queueManager.add(payload.queue!, payload.uuid!, payload.platform)
     await matcherJobQueue.add("find", { queue: payload.queue! })
-    channel.sendToQueue(CHANNEL.RETURNER, Buffer.from(JSON.stringify(message)))
+    channel.sendToQueue(
+      `${message.payload.platform}:${CHANNEL.OUTBOUND}`,
+      Buffer.from(JSON.stringify(message))
+    )
     return true
   } catch {
     return false

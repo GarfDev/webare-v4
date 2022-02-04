@@ -23,7 +23,6 @@
   },
   "dependencies": {
     "@webare/common": "^1.0.0",
-    "@webare/returner": "^1.0.0",
     "@webare/utils": "^1.0.0",
     "amqplib": "^0.8.0",
     "bullmq": "^1.68.2",
