@@ -31,11 +31,11 @@ export class QueueManager {
       if (result.length < 1) return undefined
       while (!returnUser) {
         const candidate = result[getRandomIndex(result.length)]
-        console.log(candidate)
         if (candidate !== cannotbe) {
           returnUser = candidate
         }
       }
+      await redis.hdel(queue, returnUser)
       return returnUser
     } catch {
       return undefined

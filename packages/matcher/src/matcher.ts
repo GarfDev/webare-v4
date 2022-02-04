@@ -3,7 +3,7 @@ import * as amqblib from "amqplib"
 import { pipe } from "@webare/utils"
 import { CHANNEL } from "@webare/common"
 import { findOrAddToQueue, removeFromQueue } from "resources"
-import { QueueManager, TunnelManager } from "managers"
+import { QueueManager, TunnelManager, PlatformManager } from "managers"
 import { safeParse, verifyMessage } from "utils"
 import { MatcherMessage } from "types"
 import Config from "config"
@@ -15,6 +15,7 @@ export let channel: amqblib.Channel
 // Managers
 export let queueManager: QueueManager
 export let tunnelManager: TunnelManager
+export let platformManager: PlatformManager
 
 const initilaize = async () => {
   // Initializer Services
@@ -25,6 +26,7 @@ const initilaize = async () => {
   // Initialize Managers
   queueManager = new QueueManager()
   tunnelManager = new TunnelManager()
+  platformManager = new PlatformManager()
 }
 
 export default async function matcher() {
