@@ -14,7 +14,7 @@ export const initMatchJobQueue = async () => {
       removeOnComplete: true,
       backoff: {
         type: "exponential",
-        delay: 3000,
+        delay: 5000,
       },
     },
   })
@@ -27,6 +27,7 @@ export const initMatchJobQueue = async () => {
 export const processMatchQueue = async (queue: string) => {
   const queueSnapshot = await queueManager.getAll(queue)
   const estimated = mathFloor(queueSnapshot.length, 2)
+  if (!estimated) return estimated
 
   for (let i = 0; i < estimated; i++) {
     const firstMatchIndex = getRandomIndex(queueSnapshot.length)
@@ -40,4 +41,6 @@ export const processMatchQueue = async (queue: string) => {
     await queueManager.remove(queue, secMatch)
     await tunnelManager.add(firstMatch, secMatch)
   }
+
+  return estimated
 }

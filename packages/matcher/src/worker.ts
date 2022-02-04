@@ -7,7 +7,9 @@ const initialWorker = async () => {
   const _ = new Worker(
     JOB_QUEUES.MATCHER_JOB_QUEUE,
     async (job: Job) => {
-      await processMatchQueue(job.data.queue)
+      const matched = await processMatchQueue(job.data.queue)
+      job.updateProgress(100)
+      return matched
     },
     { connection: redis }
   )

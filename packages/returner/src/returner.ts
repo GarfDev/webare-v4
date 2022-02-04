@@ -7,7 +7,7 @@ export default async function returner() {
   const channel = await connection.createChannel()
   await channel.assertQueue(CHANNEL.MATCHER)
 
-  const arr = new Array(10001).fill(undefined)
+  const arr = new Array(10000).fill(undefined)
 
   arr.forEach((_, i) => {
     console.log(`Adding user ${i + 1}`)
