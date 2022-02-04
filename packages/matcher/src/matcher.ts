@@ -17,9 +17,17 @@ export let queueManager: QueueManager
 export let tunnelManager: TunnelManager
 export let platformManager: PlatformManager
 
-const initilaize = async () => {
+export const initilaize = async () => {
   // Initializer Services
-  redis = new Redis(Config.REDIS_URL)
+  redis = new Redis(Config.REDIS_URL, {
+    enableReadyCheck: false,
+    maxRetriesPerRequest: null,
+  })
+
+  redis.on("connect", () => {
+    console.info(`connected to redis server: ${Config.REDIS_URL}`)
+  })
+
   connection = await amqblib.connect(Config.AMQB_URL)
   channel = await connection.createChannel()
 
@@ -30,8 +38,6 @@ const initilaize = async () => {
 }
 
 export default async function matcher() {
-  await initilaize()
-
   channel.consume(CHANNEL.MATCHER, async (msg) => {
     // Pre-process messages
     if (!msg) return

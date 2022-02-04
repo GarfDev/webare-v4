@@ -17,6 +17,7 @@
     "access": "public"
   },
   "scripts": {
+    "dev:worker": "WORKER=true ts-node -r tsconfig-paths/register ./src",
     "dev": "ts-node -r tsconfig-paths/register ./src",
     "tsc": "tsc"
   },

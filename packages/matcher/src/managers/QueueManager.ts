@@ -7,6 +7,10 @@ export class QueueManager {
     return await redis.hget(queue, uuid)
   }
   //
+  public async getAll(queue: string) {
+    return await redis.hkeys(queue)
+  }
+  //
   public async add(queue: string, uuid: string, platform: string) {
     const result = await redis.hset(queue, uuid, platform)
     return !!result
