@@ -7,6 +7,7 @@ const initialWorker = async () => {
   const _ = new Worker(
     JOB_QUEUES.MATCHER_JOB_QUEUE,
     async (job: Job) => {
+      job.updateProgress(10)
       const matched = await processMatchQueue(job.data.queue)
       job.updateProgress(100)
       return matched

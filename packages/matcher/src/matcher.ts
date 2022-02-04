@@ -2,7 +2,7 @@ import Redis from "ioredis"
 import * as amqblib from "amqplib"
 import { pipe } from "@webare/utils"
 import { CHANNEL } from "@webare/common"
-import { addToQueue, removeFromQueue } from "resources"
+import { addToQueue, removeFromQueue, transferMessage } from "resources"
 import { QueueManager, TunnelManager, PlatformManager } from "managers"
 import { safeParse, verifyMessage } from "utils"
 import { MatcherMessage } from "types"
@@ -56,9 +56,9 @@ export default async function matcher() {
           break
         }
         case "message": {
-          const tunnel = await tunnelManager.get(content.payload.uuid!)
-          if (!tunnel) return "TODO: Send error back to author here"
-          return "TODO: Send message content to receiver here"
+          const result = await transferMessage(content.payload)
+          if (!result) return channel.nack(msg, false, false)
+          break
         }
         case "remove:queue": {
           const result = await removeFromQueue(content.payload)
