@@ -1,34 +1,36 @@
 {
-    "name": "@webare/matcher",
-    "version": "1.0.0",
-    "description": "> TODO: description",
-    "author": "GarfDev <garfdev.13@gmail.com>",
-    "homepage": "",
-    "license": "ISC",
-    "main": "dist/src/matcher.js",
-    "directories": {
-        "src": "src",
-        "test": "__tests__"
-    },
-    "files": [
-        "lib"
-    ],
-    "publishConfig": {
-        "access": "public"
-    },
-    "scripts": {
-        "dev": "ts-node -r tsconfig-paths/register ./src"
-    },
-    "dependencies": {
-        "@webare/common": "^1.0.0",
-        "@webare/utils": "^1.0.0",
-        "amqplib": "^0.8.0",
-        "bullmq": "^1.68.2",
-        "dotenv": "^14.3.2",
-        "ioredis": "^4.28.4"
-    },
-    "devDependencies": {
-        "@types/amqplib": "^0.8.2",
-        "@types/ioredis": "^4.28.7"
-    }
+  "name": "@webare/matcher",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "GarfDev <garfdev.13@gmail.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "dist/src/matcher.js",
+  "directories": {
+    "src": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "ts-node -r tsconfig-paths/register ./src",
+    "tsc": "tsc"
+  },
+  "dependencies": {
+    "@webare/common": "^1.0.0",
+    "@webare/returner": "^1.0.0",
+    "@webare/utils": "^1.0.0",
+    "amqplib": "^0.8.0",
+    "bullmq": "^1.68.2",
+    "dotenv": "^14.3.2",
+    "ioredis": "^4.28.4"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.8.2",
+    "@types/ioredis": "^4.28.7"
+  }
 }

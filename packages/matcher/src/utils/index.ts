@@ -7,3 +7,7 @@ export const safeParse = (msg: string) => {
     return {}
   }
 }
+
+export const getRandomIndex = (length: number): number => {
+  return Math.floor(Math.random() * length)
+}

@@ -1,12 +1,12 @@
 import Redis from "ioredis"
 import * as amqblib from "amqplib"
+import { pipe } from "@webare/utils"
 import { CHANNEL } from "@webare/common"
+import { findOrAddToQueue, removeFromQueue } from "resources"
 import { QueueManager, TunnelManager } from "managers"
 import { safeParse, verifyMessage } from "utils"
 import { MatcherMessage } from "types"
-import { pipe } from "@webare/utils"
 import Config from "config"
-import { addToQueue, removeFromQueue } from "resources"
 
 export let redis: Redis.Redis
 export let connection: amqblib.Connection
@@ -18,13 +18,10 @@ export let tunnelManager: TunnelManager
 
 const initilaize = async () => {
   // Initializer Services
-  redis = new Redis({
-    port: 6379, // Redis port
-    host: "127.0.0.1", // Redis host
-    family: 4, // 4 (IPv4) or 6 (IPv6)
-  })
+  redis = new Redis(Config.REDIS_URL)
   connection = await amqblib.connect(Config.AMQB_URL)
   channel = await connection.createChannel()
+
   // Initialize Managers
   queueManager = new QueueManager()
   tunnelManager = new TunnelManager()
@@ -38,14 +35,13 @@ export default async function matcher() {
     if (!msg) return
     try {
       const parseAndVerify = pipe(safeParse, verifyMessage)
-      const content: MatcherMessage | undefined = parseAndVerify(
+      const content: MatcherMessage | undefined = await parseAndVerify(
         msg.content.toString()
       )
-      if (!content) return channel.nack(msg, false, false)
-
+      if (content === undefined) return channel.nack(msg, false, false)
       switch (content.type) {
         case "add": {
-          const result = await addToQueue(content.payload)
+          const result = await findOrAddToQueue(content.payload)
           if (!result) return channel.nack(msg, false, false)
           break
         }
