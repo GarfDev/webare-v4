@@ -6,19 +6,26 @@ export default async function returner() {
   const connection = await amqblib.connect(Config.AMQB_URL)
   const channel = await connection.createChannel()
   await channel.assertQueue(CHANNEL.MATCHER)
-  channel.sendToQueue(
-    CHANNEL.MATCHER,
-    Buffer.from(
-      JSON.stringify({
-        type: "add",
-        payload: {
-          uuid: 3,
-          platform: "discord",
-          queue: "general",
-        },
-      })
+
+  const arr = new Array(10001).fill(undefined)
+
+  arr.forEach((_, i) => {
+    console.log(`Adding user ${i + 1}`)
+    channel.sendToQueue(
+      CHANNEL.MATCHER,
+      Buffer.from(
+        JSON.stringify({
+          type: "add",
+          payload: {
+            uuid: i + 1,
+            platform: "discord",
+            queue: "general",
+          },
+        })
+      )
     )
-  )
+  })
+
   console.log("Hello from Returner")
 }
 

@@ -9,5 +9,5 @@ export const safeParse = (msg: string) => {
 }
 
 export const getRandomIndex = (length: number): number => {
-  return Math.floor(Math.random() * length)
+  return Math.floor(Math.random() * length - 1)
 }

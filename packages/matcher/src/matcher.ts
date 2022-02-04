@@ -2,7 +2,7 @@ import Redis from "ioredis"
 import * as amqblib from "amqplib"
 import { pipe } from "@webare/utils"
 import { CHANNEL } from "@webare/common"
-import { findOrAddToQueue, removeFromQueue } from "resources"
+import { addToQueue, removeFromQueue } from "resources"
 import { QueueManager, TunnelManager, PlatformManager } from "managers"
 import { safeParse, verifyMessage } from "utils"
 import { MatcherMessage } from "types"
@@ -43,7 +43,7 @@ export default async function matcher() {
       if (content === undefined) return channel.nack(msg, false, false)
       switch (content.type) {
         case "add": {
-          const result = await findOrAddToQueue(content.payload)
+          const result = await addToQueue(content.payload)
           if (!result) return channel.nack(msg, false, false)
           break
         }
