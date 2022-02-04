@@ -24,20 +24,6 @@ export class QueueManager {
       return false
     }
   }
-  //
-  public async getRandom(queue: string, cannotbe?: string) {
-    let returnUser = undefined
-    const result = await redis.hkeys(queue)
-    if (result.length <= 1) return undefined
-    while (!returnUser) {
-      const candidate = result[getRandomIndex(result.length)]
-      if (candidate !== cannotbe) {
-        returnUser = candidate
-      }
-    }
-    await redis.hdel(queue, returnUser)
-    return returnUser
-  }
 }
 
 interface Queue {

@@ -47,6 +47,8 @@ export default async function matcher() {
         msg.content.toString()
       )
       if (content === undefined) return channel.nack(msg, false, false)
+      await platformManager.set(content.payload.uuid!, content.payload.platform)
+
       switch (content.type) {
         case "add": {
           const result = await addToQueue(content.payload)

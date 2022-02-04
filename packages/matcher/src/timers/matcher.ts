@@ -29,17 +29,16 @@ export const processMatchQueue = async (queue: string) => {
   const estimated = mathFloor(queueSnapshot.length, 2)
   if (!estimated) return estimated
 
-  for (let i = 0; i < estimated; i++) {
+  while (queueSnapshot.length >= 2) {
     const firstMatchIndex = getRandomIndex(queueSnapshot.length)
-    const firstMatch = queueSnapshot[firstMatchIndex]
-    queueSnapshot.splice(firstMatchIndex, 1)
+    const firstMatch = queueSnapshot.splice(firstMatchIndex, 1)[0]
 
     const secMatchIndex = getRandomIndex(queueSnapshot.length)
-    const secMatch = queueSnapshot[secMatchIndex]
-    queueSnapshot.splice(secMatchIndex, 1)
+    const secMatch = queueSnapshot.splice(secMatchIndex, 1)[0]
+
+    await tunnelManager.add(firstMatch, secMatch)
     await queueManager.remove(queue, firstMatch)
     await queueManager.remove(queue, secMatch)
-    await tunnelManager.add(firstMatch, secMatch)
   }
 
   return estimated

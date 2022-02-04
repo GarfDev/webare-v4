@@ -3,7 +3,6 @@ import { ReturnerMessage } from "@webare/returner"
 import { channel, queueManager } from "matcher"
 import { matcherJobQueue } from "timers/matcher"
 import { MatcherMessage } from "types"
-import { matchUser } from "./matchUser"
 
 export const addToQueue = async (payload: MatcherMessage["payload"]) => {
   try {
