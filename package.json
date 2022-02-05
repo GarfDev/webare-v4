@@ -3,11 +3,14 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap",
+    "messenger": "yarn workspace @webare/messenger",
+    "discord": "yarn workspace @webare/discord",
     "matcher": "yarn workspace @webare/matcher",
     "common": "yarn workspace @webare/common",
     "utils": "yarn workspace @webare/utils"
   },
   "workspaces": [
+    "gateways/*",
     "packages/*",
     "libs/*"
   ],
