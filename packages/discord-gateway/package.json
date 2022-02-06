@@ -21,9 +21,17 @@
     "url": "git+https://github.com/GarfDev/webare-v4.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "dev": "ts-node -r tsconfig-paths/register ./src"
   },
   "bugs": {
     "url": "https://github.com/GarfDev/webare-v4/issues"
+  },
+  "dependencies": {
+    "@discordjs/rest": "^0.3.0",
+    "amqplib": "^0.8.0",
+    "discord.js": "^13.6.0"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.8.2"
   }
 }

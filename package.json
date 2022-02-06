@@ -3,8 +3,7 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "messenger": "yarn workspace @webare/messenger",
-    "discord": "yarn workspace @webare/discord",
+    "discord": "yarn workspace @webare/discord-gateway",
     "matcher": "yarn workspace @webare/matcher",
     "common": "yarn workspace @webare/common",
     "utils": "yarn workspace @webare/utils"
