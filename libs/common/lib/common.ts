@@ -1,7 +1,7 @@
 export enum CHANNEL {
   MATCHER = "matcher",
   EXECUTOR = "executor",
-  STANDARLIZER = "standarlizer",
+  OUTBOUND = "outbound",
 }
 
 export type Platform = "discord" | "messenger"

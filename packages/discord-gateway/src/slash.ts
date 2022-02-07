@@ -1,4 +1,4 @@
-import fs from "fs"
+import * as fs from "fs"
 import { REST } from "@discordjs/rest"
 import { SlashCommandBuilder } from "@discordjs/builders"
 import { Routes } from "discord-api-types/v9"
@@ -14,13 +14,15 @@ export const commands: Command[] = commandFiles.map((filename) => {
   return file
 })
 
-const slashCommands = commands.map((file) => {
-  const data = new SlashCommandBuilder()
-    .setName(file.name)
-    .setDescription(file.description)
-    .toJSON()
-  return data
-})
+const slashCommands = commands
+  .filter((file) => !!file)
+  .map((file) => {
+    const data = new SlashCommandBuilder()
+      .setName(file.name)
+      .setDescription(file.description)
+      .toJSON()
+    return data
+  })
 
 export const slashRegister = async (clientId: string) => {
   const rest = new REST({ version: "9" }).setToken(Config.TOKEN || "")

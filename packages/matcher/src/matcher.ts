@@ -25,7 +25,7 @@ export const initilaize = async () => {
   })
 
   redis.on("connect", () => {
-    console.info(`connected to redis server: ${Config.REDIS_URL}`)
+    console.info(`connected to redis server.`)
   })
 
   connection = await amqblib.connect(Config.AMQB_URL)

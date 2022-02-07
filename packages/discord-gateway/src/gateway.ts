@@ -1,12 +1,20 @@
+import * as amqblib from "amqplib"
 import { Client, Intents, Interaction } from "discord.js"
 import { CommandManager } from "managers"
-import { commands, slashRegister } from "./slash"
+import { commands, slashRegister } from "slash"
 import { checkIsCommand } from "utils"
+import { CHANNEL } from "@webare/common"
 import Config from "config"
+
+export let connection: amqblib.Connection
+export let channel: amqblib.Channel
 
 export let commandManager: CommandManager
 
 async function init(client: Client) {
+  connection = await amqblib.connect(Config.AMQB_URL)
+  channel = await connection.createChannel()
+
   commandManager = new CommandManager(client, commands)
 }
 
@@ -31,7 +39,22 @@ async function gateway() {
     if (message.author.bot) return
     if (message.author.id === client?.user?.id) return
     const commandName = checkIsCommand(message.content)
-    if (!commandName) return
+    if (!commandName) {
+      channel.sendToQueue(
+        CHANNEL.MATCHER,
+        Buffer.from(
+          JSON.stringify({
+            type: "message",
+            payload: {
+              uuid: message.author.id,
+              platform: "discord",
+              content: message.content,
+            },
+          })
+        )
+      )
+      return
+    }
 
     const response = await commandManager.execute(commandName, message)
 
@@ -51,6 +74,12 @@ async function gateway() {
     if (response) {
       await interaction.reply({ content: response })
     }
+  })
+
+  channel.assertQueue(`discord-${CHANNEL.OUTBOUND}`)
+  channel.consume(`discord-${CHANNEL.OUTBOUND}`, async (msg) => {
+    if (!msg) return
+
   })
 
   // TODO
