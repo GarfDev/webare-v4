@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap",
+    "prework": "yarn libs:tsc",
+    "libs:tsc": "yarn common run tsc && yarn utils run tsc",
     "discord": "yarn workspace @webare/discord-gateway",
     "matcher": "yarn workspace @webare/matcher",
     "common": "yarn workspace @webare/common",
