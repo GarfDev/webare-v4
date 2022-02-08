@@ -5,3 +5,11 @@ export const pipe =
 
 export const compose = <R>(fn1: (a: R) => R, ...fns: Array<(a: R) => R>) =>
   fns.reduce((prevFn, nextFn) => (value) => prevFn(nextFn(value)), fn1)
+
+export const safeParse = (msg: string) => {
+  try {
+    return JSON.parse(msg)
+  } catch {
+    return {}
+  }
+}

@@ -12,22 +12,22 @@ export const transferMessage = async (
         ...payload,
       },
     }
-    const receiver = await tunnelManager.get(payload.uuid)
+    // const receiver = await tunnelManager.get(payload.uuid)
 
-    if (!receiver) {
-      message.payload.content = "not_matched"
-      channel.sendToQueue(
-        `${message.payload.platform}:${CHANNEL.OUTBOUND}`,
-        Buffer.from(JSON.stringify(message))
-      )
-      return false
-    }
+    // if (!receiver) {
+    //   message.payload.content = "not_matched"
+    //   channel.sendToQueue(
+    //     `${message.payload.platform}:${CHANNEL.OUTBOUND}`,
+    //     Buffer.from(JSON.stringify(message))
+    //   )
+    //   return false
+    // }
 
-    const rPlatform = await platformManager.get(receiver)
+    // const rPlatform = await platformManager.get(receiver)
 
     message.type = "message"
-    message.payload.platform = rPlatform!
-    message.payload.uuid = receiver
+    // message.payload.platform = rPlatform!
+    // message.payload.uuid = receiver
 
     channel.sendToQueue(
       `${message.payload.platform}:${CHANNEL.OUTBOUND}`,

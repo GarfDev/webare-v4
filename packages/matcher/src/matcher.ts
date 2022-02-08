@@ -1,10 +1,10 @@
 import Redis from "ioredis"
 import * as amqblib from "amqplib"
-import { pipe } from "@webare/utils"
+import { pipe, safeParse } from "@webare/utils"
 import { CHANNEL } from "@webare/common"
 import { addToQueue, removeFromQueue, transferMessage } from "resources"
 import { QueueManager, TunnelManager, PlatformManager } from "managers"
-import { safeParse, verifyMessage } from "utils"
+import { verifyMessage } from "utils"
 import { MatcherMessage } from "types"
 import Config from "config"
 

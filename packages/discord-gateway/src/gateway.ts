@@ -1,10 +1,12 @@
 import * as amqblib from "amqplib"
 import { Client, Intents, Interaction } from "discord.js"
+import { CHANNEL, GatewayMessage } from "@webare/common"
+import { pipe, safeParse } from "@webare/utils"
 import { CommandManager } from "managers"
 import { commands, slashRegister } from "slash"
 import { checkIsCommand } from "utils"
-import { CHANNEL } from "@webare/common"
 import Config from "config"
+import { verifyMessage } from "utils/verify"
 
 export let connection: amqblib.Connection
 export let channel: amqblib.Channel
@@ -76,10 +78,24 @@ async function gateway() {
     }
   })
 
-  channel.assertQueue(`discord-${CHANNEL.OUTBOUND}`)
-  channel.consume(`discord-${CHANNEL.OUTBOUND}`, async (msg) => {
-    if (!msg) return
+  channel.assertQueue(`discord:outbound`)
 
+  channel.consume(`discord:outbound`, async (msg) => {
+    if (!msg) return
+    try {
+      const parseAndVerify = pipe(safeParse, verifyMessage)
+      const content: GatewayMessage | undefined = await parseAndVerify(
+        msg.content.toString()
+      )
+      console.log("content", content)
+      if (content === undefined) return channel.nack(msg, false, false)
+
+      // Forward message to receiver
+      try {
+        const channel = await client.users.fetch(content.payload.uuid!)
+        channel.send(content.payload.content!)
+      } catch (e) {}
+    } catch {}
   })
 
   // TODO
