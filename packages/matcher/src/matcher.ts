@@ -38,6 +38,7 @@ export const initilaize = async () => {
 }
 
 export default async function matcher() {
+  await channel.assertQueue(CHANNEL.MATCHER);
   channel.consume(CHANNEL.MATCHER, async (msg) => {
     // Pre-process messages
     if (!msg) return

@@ -21,7 +21,7 @@
     "url": "git+https://github.com/GarfDev/webare-v4.git"
   },
   "scripts": {
-    "dev": "ts-node -r tsconfig-paths/register ./src"
+    "dev": "nodemon"
   },
   "bugs": {
     "url": "https://github.com/GarfDev/webare-v4/issues"
