@@ -21,7 +21,7 @@
     "url": "git+https://github.com/GarfDev/webare-v4.git"
   },
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon -q"
   },
   "bugs": {
     "url": "https://github.com/GarfDev/webare-v4/issues"

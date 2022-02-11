@@ -21,7 +21,7 @@
     "url": "git+https://github.com/GarfDev/webare-v4.git"
   },
   "scripts": {
-    "dev": "nodemon",
+    "dev": "nodemon -q",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {
