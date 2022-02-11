@@ -6,6 +6,7 @@ import { addToQueue, removeFromQueue, transferMessage } from "resources"
 import { QueueManager, TunnelManager, PlatformManager } from "managers"
 import { verifyMessage } from "utils"
 import { MatcherMessage } from "types"
+import { logger } from "common"
 import Config from "config"
 
 export let redis: Redis.Redis
@@ -25,7 +26,7 @@ export const initilaize = async () => {
   })
 
   redis.on("connect", () => {
-    console.info(`connected to redis server.`)
+    logger.info('Connected to Redis Service', "INIT")
   })
 
   connection = await amqblib.connect(Config.AMQB_URL)
@@ -35,6 +36,7 @@ export const initilaize = async () => {
   queueManager = new QueueManager()
   tunnelManager = new TunnelManager()
   platformManager = new PlatformManager()
+  logger.info('Managers Initialized', "INIT")
 }
 
 export default async function matcher() {
@@ -72,6 +74,7 @@ export default async function matcher() {
 
       channel.ack(msg)
     } catch (e) {
+      logger.error((e as any).message, "STEM")
       channel.nack(msg, false, true)
     }
   })

@@ -16,6 +16,7 @@
     "libs/*"
   ],
   "devDependencies": {
+    "@ptkdev/logger": "^1.8.0",
     "@types/node": "^17.0.13",
     "@types/yup": "^0.29.13",
     "eslint": "^8.8.0",

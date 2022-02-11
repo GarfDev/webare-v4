@@ -5,6 +5,7 @@ import { Routes } from "discord-api-types/v9"
 import Config from "config"
 import { staticPath } from "utils"
 import { Command } from "types"
+import { logger } from "common"
 
 const commandPath = staticPath("commands")
 const commandFiles: any[] = []
@@ -28,12 +29,11 @@ export const slashRegister = async (clientId: string) => {
   const rest = new REST({ version: "9" }).setToken(Config.TOKEN || "")
 
   try {
-    console.log("Started refreshing application (/) commands.")
+    logger.info(`Started refreshing application (/) commands.`, "INIT")
     await rest.put(Routes.applicationCommands(clientId || ""), {
       body: slashCommands,
     })
-
-    console.log("Successfully reloaded application (/) commands.")
+    logger.info(`Successfully reloaded application (/) commands`, "INIT")
   } catch (error) {
     console.error(error)
   }

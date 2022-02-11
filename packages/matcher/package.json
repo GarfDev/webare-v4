@@ -17,7 +17,7 @@
     "access": "public"
   },
   "scripts": {
-    "dev": "nodemon",
+    "dev": "nodemon -q",
     "tsc": "tsc"
   },
   "dependencies": {

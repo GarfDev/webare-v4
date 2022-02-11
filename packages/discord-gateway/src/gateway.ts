@@ -7,6 +7,7 @@ import { commands, slashRegister } from "slash"
 import { checkIsCommand } from "utils"
 import Config from "config"
 import { verifyMessage } from "utils/verify"
+import { logger } from "common"
 
 export let connection: amqblib.Connection
 export let channel: amqblib.Channel
@@ -18,6 +19,7 @@ async function init(client: Client) {
   channel = await connection.createChannel()
 
   commandManager = new CommandManager(client, commands)
+
 }
 
 async function gateway() {
@@ -33,7 +35,7 @@ async function gateway() {
   await init(client)
 
   client.on("ready", () => {
-    console.log(`Logged in as ${client.user?.tag}!`)
+    logger.info(`Logged in as **${client.user?.tag}**!`, "INIT")
     slashRegister(client.user?.id || "")
   })
 
