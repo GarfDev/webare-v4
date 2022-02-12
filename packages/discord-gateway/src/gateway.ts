@@ -19,7 +19,6 @@ async function init(client: Client) {
   channel = await connection.createChannel()
 
   commandManager = new CommandManager(client, commands)
-
 }
 
 async function gateway() {
@@ -72,6 +71,7 @@ async function gateway() {
 
     const response = await commandManager.execute(
       interaction.commandName,
+      undefined,
       interaction
     )
 

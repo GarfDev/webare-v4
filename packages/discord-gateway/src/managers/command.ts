@@ -38,11 +38,12 @@ export class CommandManager {
 
   public async execute(
     alias: string,
-    message: Message | Interaction
+    message?: Message,
+    interaction?: Interaction
   ): Promise<Response> {
     const executor = this.commands[alias]
     if (executor) {
-      const response = await executor(message)
+      const response = await executor({ message, interaction })
       return response
     }
   }

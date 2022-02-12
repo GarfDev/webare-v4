@@ -8,7 +8,7 @@ import { Command } from "types"
 import { logger } from "common"
 
 const commandPath = staticPath("commands")
-const commandFiles: any[] = []
+const commandFiles = fs.readdirSync(commandPath);
 
 export const commands: Command[] = commandFiles.map((filename) => {
   const file = require(staticPath(`commands/${filename}`)).default

@@ -4,7 +4,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "prework": "yarn libs:tsc",
-    "start:app": "concurrently \"yarn matcher run dev\" \"yarn discord run dev\"",
+    "start": "concurrently \"yarn matcher run dev\" \"yarn discord run dev\"",
     "libs:tsc": "yarn common run tsc && yarn utils run tsc",
     "discord": "yarn workspace @webare/discord-gateway",
     "matcher": "yarn workspace @webare/matcher",
